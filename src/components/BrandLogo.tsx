@@ -24,6 +24,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 }) => {
   return (
     <img
+      loading="eager"
       src={logoAsset}
       alt={alt}
       aria-hidden={alt ? undefined : true}
