@@ -1,0 +1,6 @@
+{
+  "name": "Rim Patisserie · Tartus",
+  "description": "A cinematic, mobile-first web experience for Rim Patisserie, established in 2003 in Tartus, Syria. Artisanal couture wedding cakes, celebration sculptures, and luxury dessert catering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

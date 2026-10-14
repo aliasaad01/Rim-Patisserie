@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-arabic: 'Alexandria', system-ui, sans-serif;
+
+    /* Global Cherry Patisserie Tokens */
+    --color-cherry-deep: #4F0715;
+    --color-burgundy: #781728;
+    --color-berry-muted: #AD5B67;
+    --color-blush-pink: #E1B3C3;
+    --color-peach-cream: #EFD4C4;
+    --color-bg-main: #FFF9F5;
+    --color-surface: #FFFFFF;
+    --color-text-main: #39252A;
+    --color-text-muted: #806D71;
+    --color-border-subtle: #E8D8D5;
+
+    /* Soft Luxury Radius Scale */
+    --radius-control: 12px;
+    --radius-card: 18px;
+    --radius-panel: 22px;
+    --radius-chip: 8px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #FFF9F5;
+    color: #39252A;
+    overflow-x: hidden;
+  }
+}
+
+.font-serif-luxury {
+  font-family: var(--font-serif);
+}
+
+.font-sans-refined {
+  font-family: var(--font-sans);
+}
+
+.font-arabic-clean {
+  font-family: var(--font-arabic);
+}
+
+/* 3D Perspective & Camera Transforms */
+.perspective-cinema {
+  perspective: 1200px;
+  perspective-origin: center center;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Soft light luxury scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF9F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8D8D5;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AD5B67;
+}
+
+/* Cross-browser scrollbar hiding utility */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+@keyframes drawerIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-drawer-in {
+  animation: drawerIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drawer-in,
+  .animate-fade-in {
+    animation: none !important;
+    transition: none !important;
+  }
+}
