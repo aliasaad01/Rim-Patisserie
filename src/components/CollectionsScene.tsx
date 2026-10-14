@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { SceneId, CollectionItem } from '../types';
-import { COLLECTIONS_DATA } from '../data/patisserieData';
-import { Plus, Check } from 'lucide-react';
+import React, { useState } from "react";
+import { SceneId, CollectionItem } from "../types";
+import { COLLECTIONS_DATA } from "../data/patisserieData";
+import { Plus, Check } from "lucide-react";
 
 interface CollectionsSceneProps {
   onNavigate: (scene: SceneId) => void;
   onAddToCart: (item: CollectionItem) => void;
 }
 
-type FilterKey = 'all' | 'cakes' | 'wedding' | 'birthday' | 'pastries' | 'dessert-tables';
+type FilterKey =
+  | "all"
+  | "cakes"
+  | "wedding"
+  | "birthday"
+  | "pastries"
+  | "dessert-tables";
 
 interface FilterCategory {
   id: FilterKey;
@@ -17,22 +23,40 @@ interface FilterCategory {
 }
 
 const FILTER_CATEGORIES: FilterCategory[] = [
-  { id: 'all', label: 'All', filter: () => true },
-  { id: 'cakes', label: 'Cakes', filter: (i) => i.category === 'wedding' || i.category === 'celebration' },
-  { id: 'wedding', label: 'Wedding', filter: (i) => i.category === 'wedding' },
-  { id: 'birthday', label: 'Birthday', filter: (i) => i.category === 'celebration' },
-  { id: 'pastries', label: 'Pastries', filter: (i) => i.category === 'patisserie' },
-  { id: 'dessert-tables', label: 'Dessert Tables', filter: (i) => i.category === 'banquet' },
+  { id: "all", label: "All", filter: () => true },
+  {
+    id: "cakes",
+    label: "Cakes",
+    filter: (i) => i.category === "wedding" || i.category === "celebration",
+  },
+  { id: "wedding", label: "Wedding", filter: (i) => i.category === "wedding" },
+  {
+    id: "birthday",
+    label: "Birthday",
+    filter: (i) => i.category === "celebration",
+  },
+  {
+    id: "pastries",
+    label: "Pastries",
+    filter: (i) => i.category === "patisserie",
+  },
+  {
+    id: "dessert-tables",
+    label: "Dessert Tables",
+    filter: (i) => i.category === "banquet",
+  },
 ];
 
 export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
   onNavigate,
   onAddToCart,
 }) => {
-  const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
+  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [justAddedId, setJustAddedId] = useState<string | null>(null);
 
-  const currentCategoryObj = FILTER_CATEGORIES.find((cat) => cat.id === activeFilter) || FILTER_CATEGORIES[0];
+  const currentCategoryObj =
+    FILTER_CATEGORIES.find((cat) => cat.id === activeFilter) ||
+    FILTER_CATEGORIES[0];
   const filteredItems = COLLECTIONS_DATA.filter(currentCategoryObj.filter);
 
   const handleAddToCartClick = (item: CollectionItem) => {
@@ -53,20 +77,22 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
               Our Collections
             </h1>
             <p className="mt-0.5 text-xs text-[#806D71] font-sans-refined leading-normal line-clamp-2 max-w-md">
-              Artisanal cakes and fine pâtisserie crafted in Tartus since 2003.
+              Baking happiness in Tartus since 2003.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 sm:gap-3 self-start sm:self-auto shrink-0">
             <button
-              onClick={() => onNavigate('story')}
+              onClick={() => onNavigate("story")}
               className="text-xs text-[#806D71] hover:text-[#781728] font-medium transition-colors cursor-pointer hover:underline py-0.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#781728]"
             >
               Our Story
             </button>
-            <span className="text-[#E8D8D5] text-xs" aria-hidden="true">·</span>
+            <span className="text-[#E8D8D5] text-xs" aria-hidden="true">
+              ·
+            </span>
             <button
-              onClick={() => onNavigate('atelier')}
+              onClick={() => onNavigate("atelier")}
               className="text-xs text-[#781728] hover:text-[#4F0715] font-medium transition-colors cursor-pointer hover:underline py-0.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#781728]"
             >
               Custom Cake Order →
@@ -75,10 +101,10 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
         </div>
 
         {/* Minimal Horizontal Text-Based Filter */}
-        <nav 
-          aria-label="Product categories" 
+        <nav
+          aria-label="Product categories"
           className="w-full overflow-x-auto no-scrollbar flex items-center gap-4.5 sm:gap-6 pt-2 pb-0.5 text-xs sm:text-sm scroll-smooth pr-4 sm:pr-0"
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {FILTER_CATEGORIES.map((cat) => {
             const isActive = activeFilter === cat.id;
@@ -88,16 +114,16 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
                 onClick={() => setActiveFilter(cat.id)}
                 className={`relative shrink-0 pb-1 sm:pb-1.5 transition-colors cursor-pointer text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#781728] ${
                   isActive
-                    ? 'text-[#781728] font-medium'
-                    : 'text-[#806D71] hover:text-[#39252A]'
+                    ? "text-[#781728] font-medium"
+                    : "text-[#806D71] hover:text-[#39252A]"
                 }`}
-                aria-current={isActive ? 'true' : undefined}
+                aria-current={isActive ? "true" : undefined}
               >
                 <span className="whitespace-nowrap">{cat.label}</span>
                 {isActive && (
-                  <span 
-                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#781728] rounded-full" 
-                    aria-hidden="true" 
+                  <span
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#781728] rounded-full"
+                    aria-hidden="true"
                   />
                 )}
               </button>
@@ -112,12 +138,15 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
       <main className="max-w-5xl mx-auto w-full">
         {filteredItems.length === 0 ? (
           <div className="w-full py-12 px-6 text-center bg-[#FFFFFF] border border-[#E8D8D5] rounded-[14px]">
-            <h2 className="font-serif-luxury text-lg text-[#39252A]">No creations in this category</h2>
+            <h2 className="font-serif-luxury text-lg text-[#39252A]">
+              No creations in this category
+            </h2>
             <p className="text-xs text-[#806D71] mt-1">
-              Explore our full portfolio or request a custom design in the atelier.
+              Explore our full portfolio or request a custom design in the
+              atelier.
             </p>
             <button
-              onClick={() => setActiveFilter('all')}
+              onClick={() => setActiveFilter("all")}
               className="mt-3 px-3 py-1.5 rounded-[10px] bg-[#FFF9F5] border border-[#E8D8D5] text-[#39252A] text-xs font-medium cursor-pointer hover:bg-[#F5ECE8]"
             >
               View All
@@ -143,7 +172,7 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
                         className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                         onError={(e) => {
                           const target = e.currentTarget;
-                          target.style.display = 'none';
+                          target.style.display = "none";
                         }}
                       />
                     </div>
@@ -154,7 +183,10 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
                         <h2 className="font-serif-luxury text-base sm:text-lg text-[#39252A] leading-tight font-normal">
                           {item.titleEn}
                         </h2>
-                        <span dir="rtl" className="text-xs font-arabic-clean text-[#806D71] shrink-0">
+                        <span
+                          dir="rtl"
+                          className="text-xs font-arabic-clean text-[#806D71] shrink-0"
+                        >
                           {item.titleAr}
                         </span>
                       </div>
@@ -174,8 +206,8 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
                       onClick={() => handleAddToCartClick(item)}
                       className={`w-full h-11 px-3 rounded-[11px] text-xs font-medium flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-[0.98] border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] ${
                         isAdded
-                          ? 'bg-[#E1B3C3] text-[#4F0715] border-[#AD5B67]/50'
-                          : 'bg-[#EFD4C4] hover:bg-[#E8C7B2] text-[#781728] hover:text-[#4F0715] border-[#E8D8D5] hover:border-[#AD5B67]/60'
+                          ? "bg-[#E1B3C3] text-[#4F0715] border-[#AD5B67]/50"
+                          : "bg-[#EFD4C4] hover:bg-[#E8C7B2] text-[#781728] hover:text-[#4F0715] border-[#E8D8D5] hover:border-[#AD5B67]/60"
                       }`}
                       aria-label={`Add ${item.titleEn} to cart`}
                     >
