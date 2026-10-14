@@ -1,4 +1,5 @@
 import { CollectionItem } from "../types";
+import { buildGeneralWhatsAppUrl } from "../utils/whatsapp";
 
 import weddingImg from "../assets/images/wedding.jpg";
 import patisserieImg from "../assets/images/signature.jpg";
@@ -26,8 +27,9 @@ export const BRAND_INFO = {
   instagramUrl: "https://www.instagram.com/rim__patisserie/",
   facebookName: "Rim Ibrahim",
   facebookUrl: "https://www.facebook.com/share/1LHGyw3NJj/",
-  whatsappUrl:
-    "https://wa.me/963985155115?text=Hello%20Rim%20Patisserie%2C%20I%20would%20like%20to%20inquire%20about%20a%20bespoke%20cake%20order.",
+  // General contact action: short Arabic greeting built once by
+  // src/utils/whatsapp.ts (encoded exactly once). Do not hardcode wa.me URLs.
+  whatsappUrl: buildGeneralWhatsAppUrl(),
 };
 
 export const COLLECTIONS_DATA: CollectionItem[] = [

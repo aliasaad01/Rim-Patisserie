@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CartItem } from '../types';
+import { buildCartOrderUrl } from '../utils/whatsapp';
 import { X, Plus, Minus, Trash2, ShoppingBag, MessageCircle } from 'lucide-react';
 
 interface CartDrawerProps {
@@ -22,6 +23,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onNotesChange,
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [hasOpenedWhatsApp, setHasOpenedWhatsApp] = useState(false);
 
   // Lock background body scroll and listen for Escape key
   useEffect(() => {
@@ -52,38 +54,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const generateWhatsAppOrderUrl = () => {
-    if (items.length === 0) return '';
-
-    const itemsList = items
-      .map(
-        (item, index) =>
-          `${index + 1}. ${item.product.titleAr} (${item.product.titleEn}) × ${item.quantity}`
-      )
-      .join('\n');
-
-    const notesSection = notes.trim()
-      ? `\n\n📌 ملاحظات وموعد المناسبة:\n${notes.trim()}`
-      : '';
-
-    const text = `مرحباً حلويات ريم (طرطوس) 🌸
-أود الاستفسار وتأكيد إمكانية تجهيز الطلب التالي:
-
-${itemsList}
-
-يرجى تأكيد الأسعار النهائية وتوفر المواد وموعد الاستلام في طرطوس.${notesSection}
-
-شكراً جزيلاً لكم.`;
-
-    return `https://wa.me/963985155115?text=${encodeURIComponent(text)}`;
-  };
-
   const handleSendOrder = () => {
-    if (items.length === 0) return;
-    const url = generateWhatsAppOrderUrl();
-    if (url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
+    // An empty cart never generates an order message: the button is disabled
+    // and the Arabic empty-state prompts the customer to add products first.
+    const url = buildCartOrderUrl(items, notes);
+    if (!url) return;
+    setHasOpenedWhatsApp(true);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -142,7 +119,7 @@ ${itemsList}
                 Your cart is empty
               </h3>
               <p dir="rtl" className="text-xs font-arabic-clean text-[#806D71] mt-1">
-                سلة الطلبات فارغة حالياً
+                سلة الطلبات فارغة — أضف المنتجات أولاً لإرسال الطلب عبر واتساب.
               </p>
               <p className="text-xs text-[#806D71] mt-2 max-w-xs mx-auto leading-relaxed">
                 Add fine cakes or patisserie from our collections to request your personalized order via WhatsApp.
@@ -271,6 +248,12 @@ ${itemsList}
             <MessageCircle className="w-4 h-4 shrink-0" />
             <span>Send Order via WhatsApp</span>
           </button>
+
+          {hasOpenedWhatsApp && (
+            <p dir="rtl" className="font-arabic-clean text-[11px] text-[#781728] text-center font-medium">
+              تم فتح واتساب — راجع الرسالة الجاهزة وأرسلها يدوياً.
+            </p>
+          )}
 
           <button
             onClick={onClose}

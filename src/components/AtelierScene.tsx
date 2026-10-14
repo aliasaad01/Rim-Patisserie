@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SceneId, CollectionItem } from '../types';
 import { BRAND_INFO } from '../data/patisserieData';
 import { MessageCircle, Check, Phone, ArrowLeft, Sparkles, Calendar } from 'lucide-react';
+import { buildAtelierRequestUrl } from '../utils/whatsapp';
 
 interface AtelierSceneProps {
   onNavigate: (scene: SceneId) => void;
@@ -56,63 +57,39 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
 
   const [hasOpenedWhatsApp, setHasOpenedWhatsApp] = useState(false);
 
+  // Tracks choices the customer actually clicked (and text they edited), so
+  // preselected form defaults are never presented as explicit selections
+  // in the prefilled WhatsApp message.
+  const [explicitChoices, setExplicitChoices] = useState({
+    occasion: false,
+    size: false,
+    flavor: false,
+    designDescription: false,
+  });
+  const markChoice = (key: keyof typeof explicitChoices) =>
+    setExplicitChoices((prev) => ({ ...prev, [key]: true }));
+
   const selectedOccasion = OCCASIONS.find((o) => o.id === form.occasion);
   const selectedSize = SIZES.find((s) => s.id === form.size);
   const selectedFlavor = FLAVORS.find((f) => f.id === form.flavor);
 
-  const generateArabicWhatsAppMessage = () => {
-    const lines: string[] = [
-      'مرحباً حلويات ريم (طرطوس) 🌸',
-      'أود الاستفسار وتأكيد إمكانية تحضير كيك خاص بالطلب:',
-      '',
-    ];
-
-    if (prefillItem) {
-      lines.push(`• نموذج التصميم المستوحى منه: ${prefillItem.titleAr} (${prefillItem.titleEn})`);
-    }
-
-    if (selectedOccasion) {
-      lines.push(`• المناسبة: ${selectedOccasion.labelAr} (${selectedOccasion.labelEn})`);
-    }
-
-    if (selectedSize) {
-      lines.push(`• الحجم: ${selectedSize.labelAr} (${selectedSize.labelEn} - ${selectedSize.subtitleEn})`);
-    }
-
-    if (selectedFlavor) {
-      lines.push(`• النكهة: ${selectedFlavor.labelAr} (${selectedFlavor.labelEn})`);
-    }
-
-    if (form.designDescription.trim()) {
-      lines.push(`• تصميم الكيك والشكل: ${form.designDescription.trim()}`);
-    }
-
-    if (form.inscription.trim()) {
-      lines.push(`• العبارة على الكيك: "${form.inscription.trim()}"`);
-    }
-
-    if (form.eventDate) {
-      lines.push(`• موعد المناسبة: ${form.eventDate}`);
-    }
-
-    if (form.notes.trim()) {
-      lines.push(`• ملاحظات إضافية: ${form.notes.trim()}`);
-    }
-
-    lines.push('');
-    lines.push('يرجى تأكيد إمكانية التجهيز والأسعار والتفاصيل في طرطوس.');
-    lines.push('شكراً لكم.');
-
-    return lines.join('\n');
-  };
-
-  const getWhatsAppUrl = () => {
-    return `https://wa.me/963985155115?text=${encodeURIComponent(generateArabicWhatsAppMessage())}`;
-  };
-
   const handleSendWhatsApp = () => {
+    // Only explicitly chosen or entered values are included (see
+    // buildAtelierRequestMessage in src/utils/whatsapp.ts).
+    const url = buildAtelierRequestUrl({
+      occasionLabelAr: explicitChoices.occasion ? selectedOccasion?.labelAr : undefined,
+      sizeLabelAr:
+        explicitChoices.size && selectedSize
+          ? `${selectedSize.labelAr} · ${selectedSize.subtitleAr}`
+          : undefined,
+      flavorLabelAr: explicitChoices.flavor ? selectedFlavor?.labelAr : undefined,
+      designDescription: explicitChoices.designDescription ? form.designDescription : undefined,
+      inscription: form.inscription,
+      eventDate: form.eventDate,
+      notes: form.notes,
+    });
     setHasOpenedWhatsApp(true);
-    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   // Live Summary Block
@@ -224,8 +201,8 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
         </button>
 
         {hasOpenedWhatsApp && (
-          <p className="text-[11px] text-[#781728] text-center font-medium">
-            WhatsApp opened. Please send the prefilled request to our Tartus bakery.
+          <p dir="rtl" className="font-arabic-clean text-[11px] text-[#781728] text-center font-medium">
+            تم فتح واتساب — راجع الرسالة الجاهزة وأرسلها يدوياً.
           </p>
         )}
 
@@ -331,7 +308,10 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
                       key={occ.id}
                       role="radio"
                       aria-checked={isSelected}
-                      onClick={() => setForm({ ...form, occasion: occ.id })}
+                      onClick={() => {
+                        setForm({ ...form, occasion: occ.id });
+                        markChoice('occasion');
+                      }}
                       className={`p-2.5 sm:p-3 rounded-[11px] text-left transition-all text-xs cursor-pointer flex items-center justify-between min-h-[46px] border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] ${
                         isSelected
                           ? 'bg-[#FFF9F5] text-[#39252A] border-[#781728] shadow-2xs font-medium'
@@ -379,7 +359,10 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
                       key={size.id}
                       role="radio"
                       aria-checked={isSelected}
-                      onClick={() => setForm({ ...form, size: size.id })}
+                      onClick={() => {
+                        setForm({ ...form, size: size.id });
+                        markChoice('size');
+                      }}
                       className={`p-2.5 sm:p-3 rounded-[11px] text-left transition-all text-xs cursor-pointer flex items-center justify-between min-h-[48px] border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] ${
                         isSelected
                           ? 'bg-[#FFF9F5] text-[#39252A] border-[#781728] shadow-2xs font-medium'
@@ -430,7 +413,10 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
                       key={flavor.id}
                       role="radio"
                       aria-checked={isSelected}
-                      onClick={() => setForm({ ...form, flavor: flavor.id })}
+                      onClick={() => {
+                        setForm({ ...form, flavor: flavor.id });
+                        markChoice('flavor');
+                      }}
                       className={`w-full p-2.5 sm:p-3 rounded-[11px] text-left transition-all text-xs cursor-pointer flex items-center justify-between min-h-[44px] border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] ${
                         isSelected
                           ? 'bg-[#FFF9F5] text-[#39252A] border-[#781728] shadow-2xs font-medium'
@@ -476,7 +462,10 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
                 id="design-description"
                 rows={2}
                 value={form.designDescription}
-                onChange={(e) => setForm({ ...form, designDescription: e.target.value })}
+                onChange={(e) => {
+                  setForm({ ...form, designDescription: e.target.value });
+                  markChoice('designDescription');
+                }}
                 placeholder="e.g. White roses, gold touches, minimalist texture, or character theme..."
                 className="w-full p-2.5 rounded-[10px] bg-[#FFF9F5] border border-[#E8D8D5] text-xs text-[#39252A] placeholder:text-[#806D71]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] resize-none"
               />
