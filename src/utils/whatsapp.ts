@@ -1,4 +1,4 @@
-import { CartItem } from '../types';
+import { CartItem } from "../types";
 
 /**
  * Centralized WhatsApp message generation for Rim Patisserie.
@@ -12,7 +12,7 @@ import { CartItem } from '../types';
  * WhatsApp destination in international format without "+".
  * Same number as BRAND_INFO.phoneIntl (+963985155115).
  */
-export const WHATSAPP_NUMBER = '963985155115';
+export const WHATSAPP_NUMBER = "963985155115";
 
 /** Build a wa.me link with the message encoded exactly once (no double encoding). */
 export const buildWhatsAppUrl = (message: string): string =>
@@ -23,12 +23,12 @@ export const buildWhatsAppUrl = (message: string): string =>
  * Opens the conversation naturally — never implies an order was placed.
  */
 export const GENERAL_GREETING_MESSAGE = [
-  'السلام عليكم، يعطيكم العافية.',
-  '',
-  'حابب استفسر عن الحلويات و تفاصيل الطلبات المتاحة.',
-  '',
-  'شكراً إلكن.',
-].join('\n');
+  "مرحبا، يعطيكم العافية.",
+  "",
+  "حابب استفسر عن الحلويات و تفاصيل الطلبات المتاحة.",
+  "",
+  "شكراً إلكن.",
+].join("\n");
 
 /** General contact URL — used by every generic WhatsApp action. */
 export const buildGeneralWhatsAppUrl = (): string =>
@@ -41,35 +41,46 @@ export const buildGeneralWhatsAppUrl = (): string =>
  * Product names use the existing Arabic name; items without one fall back to
  * their existing customer-facing name (no invented translations).
  */
-export const buildCartOrderMessage = (items: CartItem[], notes: string): string => {
+export const buildCartOrderMessage = (
+  items: CartItem[],
+  notes: string,
+): string => {
   const itemLines = items.map((item) => {
     const name = item.product.titleAr?.trim() || item.product.titleEn.trim();
     return `• ${name} — الكمية: ${item.quantity}`;
   });
 
   const lines: string[] = [
-    'مرحبا، يعطيكم العافية.',
-    '',
-    'حابب استفسر عن طلبي التالي:',
-    '',
+    "مرحبا، يعطيكم العافية.",
+    "",
+    "حابب استفسر عن طلبي التالي:",
+    "",
     ...itemLines,
   ];
 
   const trimmedNotes = notes.trim();
   if (trimmedNotes) {
-    lines.push('', `ملاحظات إضافية: ${trimmedNotes}`);
+    lines.push("", `ملاحظات إضافية: ${trimmedNotes}`);
   }
 
-  lines.push('', 'يرجى تأكيد الأسعار والتوفر والتفاصيل قبل اعتماد الطلب.', '', 'شكراً إلكن.');
+  lines.push(
+    "",
+    "يرجى تأكيد الأسعار والتوفر والتفاصيل قبل اعتماد الطلب.",
+    "",
+    "شكراً إلكن.",
+  );
 
-  return lines.join('\n');
+  return lines.join("\n");
 };
 
 /**
  * wa.me URL for the cart order, or `null` when the cart is empty —
  * an empty cart must never generate an order message.
  */
-export const buildCartOrderUrl = (items: CartItem[], notes: string): string | null => {
+export const buildCartOrderUrl = (
+  items: CartItem[],
+  notes: string,
+): string | null => {
   if (items.length === 0) return null;
   return buildWhatsAppUrl(buildCartOrderMessage(items, notes));
 };
@@ -97,11 +108,13 @@ export interface AtelierRequestDetails {
  * values. Empty optional fields are omitted entirely (no empty labels or lines).
  * Framed as an inquiry — never as a confirmed booking.
  */
-export const buildAtelierRequestMessage = (details: AtelierRequestDetails): string => {
+export const buildAtelierRequestMessage = (
+  details: AtelierRequestDetails,
+): string => {
   const lines: string[] = [
-    'مرحبا، يعطيكم العافية.',
-    '',
-    'حابب استفسر عن تنفيذ كيكة حسب التفاصيل التالية:',
+    "مرحبا، يعطيكم العافية.",
+    "",
+    "حابب استفسر عن تنفيذ كيكة حسب التفاصيل التالية:",
   ];
 
   const detailLines: string[] = [];
@@ -112,27 +125,33 @@ export const buildAtelierRequestMessage = (details: AtelierRequestDetails): stri
     }
   };
 
-  addField('المناسبة', details.occasionLabelAr);
-  addField('الحجم أو عدد الطبقات', details.sizeLabelAr);
-  addField('النكهة', details.flavorLabelAr);
-  addField('التصميم', details.designDescription);
-  addField('العبارة على الكيكة', details.inscription);
-  addField('التاريخ المطلوب', details.eventDate);
+  addField("المناسبة", details.occasionLabelAr);
+  addField("الحجم أو عدد الطبقات", details.sizeLabelAr);
+  addField("النكهة", details.flavorLabelAr);
+  addField("التصميم", details.designDescription);
+  addField("العبارة على الكيكة", details.inscription);
+  addField("التاريخ المطلوب", details.eventDate);
 
   if (detailLines.length > 0) {
-    lines.push('', ...detailLines);
+    lines.push("", ...detailLines);
   }
 
   const trimmedNotes = details.notes?.trim();
   if (trimmedNotes) {
-    lines.push('', `ملاحظات إضافية: ${trimmedNotes}`);
+    lines.push("", `ملاحظات إضافية: ${trimmedNotes}`);
   }
 
-  lines.push('', 'يرجى إعلامي بإمكانية التنفيذ والتكلفة المناسبة.', '', 'شكراً إلكن.');
+  lines.push(
+    "",
+    "يرجى إعلامي بإمكانية التنفيذ والتكلفة المناسبة.",
+    "",
+    "شكراً إلكن.",
+  );
 
-  return lines.join('\n');
+  return lines.join("\n");
 };
 
 /** wa.me URL for the Atelier request (always generated — greeting alone is valid). */
-export const buildAtelierRequestUrl = (details: AtelierRequestDetails): string =>
-  buildWhatsAppUrl(buildAtelierRequestMessage(details));
+export const buildAtelierRequestUrl = (
+  details: AtelierRequestDetails,
+): string => buildWhatsAppUrl(buildAtelierRequestMessage(details));

@@ -24,7 +24,7 @@ export const CinematicHud: React.FC<CinematicHudProps> = ({
 
   return (
     <header
-      className="sticky top-0 left-0 right-0 z-40 h-14 md:h-16 flex items-center justify-between px-3 sm:px-6 md:px-8 bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#E8D8D5] transition-colors"
+      className="sticky top-0 left-0 right-0 z-40 h-14 md:h-16 flex items-center justify-between px-3 sm:px-6 md:px-8 bg-[#FFFFFF]/95 sm:backdrop-blur-md border-b border-[#E8D8D5] transition-colors"
       aria-label="Site Navigation"
     >
       {/* Left: Back to Entrance + Brand Mark */}
@@ -69,7 +69,7 @@ export const CinematicHud: React.FC<CinematicHudProps> = ({
             <ShoppingBag className="w-3.5 h-3.5 text-[#781728] shrink-0" />
             <span className="hidden lg:inline">Cart</span>
             {cartCount > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-[#781728] text-[#FFFFFF] leading-none">
+              <span className="p-1.5 w-5 h-5 rounded-full text-[10px] font-mono font-bold bg-[#781728] text-[#FFFFFF] leading-none flex justify-center items-center">
                 {cartCount}
               </span>
             )}

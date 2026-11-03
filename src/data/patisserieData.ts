@@ -1,10 +1,18 @@
 import { CollectionItem } from "../types";
 import { buildGeneralWhatsAppUrl } from "../utils/whatsapp";
 
-import weddingImg from "../assets/images/wedding.jpg";
-import patisserieImg from "../assets/images/signature.jpg";
-import celebrationImg from "../assets/images/celebration.jpg";
-import banquetImg from "../assets/images/dessert.jpg";
+import weddingImg from "../assets/images/wedding-960.webp";
+import weddingImgSm from "../assets/images/wedding-640.webp";
+import weddingImgThumb from "../assets/images/wedding-320.webp";
+import patisserieImg from "../assets/images/signature-960.webp";
+import patisserieImgSm from "../assets/images/signature-640.webp";
+import patisserieImgThumb from "../assets/images/signature-320.webp";
+import celebrationImg from "../assets/images/celebration-960.webp";
+import celebrationImgSm from "../assets/images/celebration-640.webp";
+import celebrationImgThumb from "../assets/images/celebration-320.webp";
+import banquetImg from "../assets/images/dessert-960.webp";
+import banquetImgSm from "../assets/images/dessert-640.webp";
+import banquetImgThumb from "../assets/images/dessert-320.webp";
 
 export const BRAND_INFO = {
   name: "Rim Patisserie",
@@ -61,6 +69,8 @@ export const COLLECTIONS_DATA: CollectionItem[] = [
       "تقطير بتلات الورد الجوري",
     ],
     image: weddingImg,
+    imageThumb: weddingImgThumb,
+    imageSrcSet: `${weddingImgSm} 640w, ${weddingImg} 960w`,
     highlight: "Handmade Sugar Floral Cascade",
     dimensions: "5 Tiers · 95cm height",
   },
@@ -92,6 +102,8 @@ export const COLLECTIONS_DATA: CollectionItem[] = [
       "كوليس التوت الطازج",
     ],
     image: celebrationImg,
+    imageThumb: celebrationImgThumb,
+    imageSrcSet: `${celebrationImgSm} 640w, ${celebrationImg} 960w`,
     highlight: "24k Gold Accents & Calligraphy",
     dimensions: "3 Tiers · 60cm height",
   },
@@ -124,6 +136,8 @@ export const COLLECTIONS_DATA: CollectionItem[] = [
       "موس فانيليا تاهيتي",
     ],
     image: patisserieImg,
+    imageThumb: patisserieImgThumb,
+    imageSrcSet: `${patisserieImgSm} 640w, ${patisserieImg} 960w`,
     highlight: "Mirror Glaze Technique",
     dimensions: "22cm diameter · 6cm height",
   },
@@ -156,6 +170,8 @@ export const COLLECTIONS_DATA: CollectionItem[] = [
       "بيتي فور فاخر مشغول يدوياً",
     ],
     image: banquetImg,
+    imageThumb: banquetImgThumb,
+    imageSrcSet: `${banquetImgSm} 640w, ${banquetImg} 960w`,
     highlight: "Complete Event Staging",
     dimensions: "Custom 3–6m Buffet Table",
   },

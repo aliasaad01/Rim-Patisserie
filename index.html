@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Official Rim Patisserie logo: avoids the implicit /favicon.ico 404 and
+         starts the critical entrance hero logo download in parallel with JS. -->
+    <link rel="icon" type="image/webp" href="/src/assets/images/logo-512-q90.webp" />
+    <link rel="preload" as="image" href="/src/assets/images/logo-512-q90.webp" />
     <title>Rim Patisserie · Tartus</title>
     <meta name="description" content="A cinematic, mobile-first web experience for Rim Patisserie, established in 2003 in Tartus, Syria. Artisanal couture wedding cakes, celebration sculptures, and luxury dessert catering." />
     <meta property="og:title" content="Rim Patisserie · Tartus" />

@@ -9,8 +9,6 @@ interface CartDrawerProps {
   items: CartItem[];
   onUpdateQuantity: (productId: string, quantity: number) => void;
   onRemoveItem: (productId: string) => void;
-  notes: string;
-  onNotesChange: (notes: string) => void;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -19,11 +17,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   items,
   onUpdateQuantity,
   onRemoveItem,
-  notes,
-  onNotesChange,
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [hasOpenedWhatsApp, setHasOpenedWhatsApp] = useState(false);
+  // Order notes live here (not in App) so typing never re-renders the whole
+  // scene tree on every keystroke; this component instance persists for the
+  // app lifetime, so note persistence behaves exactly as before.
+  const [notes, setNotes] = useState('');
 
   // Lock background body scroll and listen for Escape key
   useEffect(() => {
@@ -36,8 +36,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     if (isOpen) {
       window.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
-      // Auto focus close button for accessibility
-      setTimeout(() => closeButtonRef.current?.focus(), 50);
+      // NOTE: the close-button autofocus that used to run here via
+      // `setTimeout(..., 50)` was removed. While a drawer is open, App re-renders
+      // on every cart interaction (add/remove/qty) because the `onClose`
+      // callback is a fresh arrow function on each render. That re-ran this
+      // effect and re-scheduled the focus onto the tiny close button, which
+      // pulled focus away from the notes textarea while the user was typing —
+      // on mobile this discards the on-screen keyboard, so the field appears to
+      // lose focus after each keystroke. The close button remains fully
+      // reachable by touch; the notes textarea keeps focus for the whole
+      // duration of a typing session.
     } else {
       document.body.style.overflow = '';
     }
@@ -142,8 +150,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   >
                     {/* Small Thumbnail */}
                     <img
-                      src={item.product.image}
+                      src={item.product.imageThumb ?? item.product.image}
                       alt={item.product.titleEn}
+                      decoding="async"
                       className="w-13 h-13 sm:w-15 sm:h-15 rounded-[10px] object-cover shrink-0 border border-[#E8D8D5]/80 bg-[#FFFFFF]"
                       loading="lazy"
                     />
@@ -213,7 +222,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <textarea
                   id="cart-customer-notes"
                   value={notes}
-                  onChange={(e) => onNotesChange(e.target.value)}
+                  onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Desired celebration date, cake inscription, or flavor preferences..."
                   rows={2}
                   className="w-full p-2.5 rounded-[10px] bg-[#FFF9F5] border border-[#E8D8D5] text-xs text-[#39252A] placeholder:text-[#806D71]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#781728] resize-none transition-colors"

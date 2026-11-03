@@ -166,8 +166,13 @@ export const CollectionsScene: React.FC<CollectionsSceneProps> = ({
                     <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden rounded-[10px] bg-[#E8D8D5]/20 border border-[#E8D8D5]/60">
                       <img
                         src={item.image}
+                        srcSet={item.imageSrcSet}
+                        sizes="(max-width: 640px) calc(100vw - 52px), (max-width: 1024px) 45vw, 320px"
                         alt={item.titleEn}
+                        width={960}
+                        height={717}
                         loading="lazy"
+                        decoding="async"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                         onError={(e) => {

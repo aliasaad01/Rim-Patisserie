@@ -19,6 +19,10 @@ export interface CollectionItem {
   flavorNotesEn: string[];
   flavorNotesAr: string[];
   image: string;
+  /** Small square-ish variant for cart thumbnails and the Atelier reference banner. */
+  imageThumb?: string;
+  /** Responsive srcset (640w/960w WebP) for the collection card image. */
+  imageSrcSet?: string;
   shortDescriptionEn?: string;
   shortDescriptionAr?: string;
   highlight?: string;

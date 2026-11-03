@@ -256,8 +256,12 @@ export const AtelierScene: React.FC<AtelierSceneProps> = ({
           <div className="mt-3 p-2.5 sm:p-3 rounded-[12px] bg-[#FFFFFF] border border-[#E8D8D5] flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
               <img
-                src={prefillItem.image}
+                src={prefillItem.imageThumb ?? prefillItem.image}
                 alt={prefillItem.titleEn}
+                width={320}
+                height={239}
+                decoding="async"
+                loading="lazy"
                 className="w-11 h-11 rounded-[8px] object-cover shrink-0 border border-[#E8D8D5]"
               />
               <div className="min-w-0">

@@ -60,7 +60,11 @@ export const StoryScene: React.FC<StorySceneProps> = ({ onNavigate }) => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-7 items-center">
             {/* Brand Emblem */}
             <div className="md:col-span-4 flex justify-center py-1">
-              <BrandLogo sizeClassName="h-16 sm:h-20 md:h-24" className="select-none" />
+              <BrandLogo
+                sizeClassName="h-16 sm:h-20 md:h-24"
+                className="select-none"
+                loading="lazy"
+              />
             </div>
 
             {/* Narrative */}
@@ -79,7 +83,7 @@ export const StoryScene: React.FC<StorySceneProps> = ({ onNavigate }) => {
 
               <p className="text-[#39252A]">
                 Rim Patisserie was established in 2003 in Tartus, Syria by Rim
-                Ibrahim. For over twenty years, our atelier has focused on
+                Ibrahim. For over twenty years, the owner has focused on
                 creating bespoke wedding cakes, celebratory tiers, and
                 handcrafted pastries for family occasions and special events.
               </p>
@@ -125,7 +129,7 @@ export const StoryScene: React.FC<StorySceneProps> = ({ onNavigate }) => {
         <section aria-label="Key Milestones">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-serif-luxury text-lg sm:text-xl text-[#39252A] font-normal">
-              Key Milestones
+              Milestones
             </h2>
             <span
               dir="rtl"
@@ -239,7 +243,7 @@ export const StoryScene: React.FC<StorySceneProps> = ({ onNavigate }) => {
                 aria-label="Order or inquire via WhatsApp"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp Atelier ({BRAND_INFO.phone})</span>
+                <span>WhatsApp ({BRAND_INFO.phone})</span>
               </a>
 
               <a

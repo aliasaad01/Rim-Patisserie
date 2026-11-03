@@ -63,7 +63,12 @@ export const EntranceScene: React.FC<EntranceSceneProps> = ({ onNavigate }) => {
       {/* Hero Visual Anchor: Official Logo Emblem & Brand Lockup */}
       <div className="relative flex flex-col items-center justify-center my-auto shrink-0 text-center max-w-md w-full px-2">
         {/* Official Rim Patisserie logo emblem (single shared source of truth) */}
-        <BrandLogo sizeClassName="h-28 sm:h-32 md:h-40" className="select-none" />
+        <BrandLogo
+          sizeClassName="h-28 sm:h-32 md:h-40"
+          className="select-none"
+          loading="eager"
+          fetchPriority="high"
+        />
 
         {/* Brand Typography & Tagline */}
         <div className="mt-2.5 sm:mt-3.5">
